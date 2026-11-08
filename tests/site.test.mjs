@@ -14,10 +14,9 @@ test('21 original pages, 12 city/service routes and key static assets generate',
  const expected=['index.html','services/index.html','about/index.html','privacy/index.html',
   ...services.map(s=>'services/'+s+'/index.html'),
   ...services.flatMap(s=>cities.map(c=>s+'/'+c+'/index.html')),
-  '404.html','robots.txt','sitemap.xml','CNAME','assets/site.css','assets/site.js','assets/favicon.svg'];
+  '404.html','robots.txt','sitemap.xml','assets/site.css','assets/site.js','assets/favicon.svg'];
  for(const path of expected)assert.ok(existsSync(join(BASE,path)),'Missing '+path);
  assert.equal(services.length*cities.length,12);
- assert.equal(read('CNAME').trim(),'niterunservices.com','Published Pages artifact must keep the purchased custom domain');
 });
 test('every internal link in all generated pages resolves to a file within the site',()=>{
  const pages=['index.html','services/index.html','about/index.html','privacy/index.html',

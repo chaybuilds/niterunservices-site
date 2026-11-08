@@ -191,8 +191,7 @@ async function save(path,contents){
 }
 await rm(DIST,{recursive:true,force:true});
 await mkdir(DIST,{recursive:true});
-// GitHub Pages Actions serves dist/; its custom-domain certificate requires a deployed CNAME artifact.
-await save('CNAME','niterunservices.com\n');
+// The GitHub Pages Actions custom domain is configured via repository Settings, not a CNAME artifact.
 await save('index.html',shell({title:'Home, vehicle and seasonal services — one simple request',desc:'One place to request cleaning, detailing, exterior washing and holiday service estimates in North Carolina. Review availability before booking.',route:'/',depth:0,content:homeBody,bodyClass:'home'}));
 await save('services/index.html',shell({title:'Explore our services',desc:'Explore NiteClean, NiteDetail, NiteWash and NiteHolidays. Request clear scope and local availability before scheduling.',route:'/services/',depth:1,content:serviceIndex()}));
 await save('about/index.html',shell({title:'About NiteRun Services',desc:'Learn how NiteRun Services coordinates independent home, auto and seasonal service requests with transparent booking steps.',route:'/about/',depth:1,content:aboutBody}));
