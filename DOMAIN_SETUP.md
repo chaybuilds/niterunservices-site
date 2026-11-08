@@ -1,6 +1,6 @@
 # Namecheap domain activation
 
-Domain purchased by the owner: `niterunservices.com`.
+Domain purchased by the owner: `niterunservices.com`. On November 8, 2026 the GitHub Pages custom-domain setting was configured, four apex A records and the `www` CNAME were saved in Namecheap. DNS convergence and the Pages HTTPS certificate still require successful verification.
 
 GitHub Pages: https://github.com/chaybuilds/niterunservices-site/settings/pages
 

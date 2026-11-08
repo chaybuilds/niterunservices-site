@@ -4,7 +4,7 @@ One website for NiteClean, NiteDetail, NiteWash and NiteHolidays.
 
 **Public preview:** https://chaybuilds.github.io/niterunservices-site/
 
-**Intended custom domain:** https://niterunservices.com/ (Namecheap DNS cutover pending).
+**Custom domain:** https://niterunservices.com/ (GitHub Pages configured; Namecheap DNS cutover made on November 8, 2026; HTTPS certificate and public activation must still be independently verified).
 
 ## Architecture
 - Static, dependency-free, mobile-first source; generated into `dist/` for GitHub Pages.
