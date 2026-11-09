@@ -9,6 +9,9 @@ const allowedOrigins=new Set([
 const SERVICES=new Set(['cleaning','detailing','washing','holiday-lights']);
 const CITIES=new Set(['wilmington','raleigh','charlotte']);
 const TIMINGS=new Set(['asap','week','month','flexible']);
+// Pin to the visible request-only checkbox on the existing public website.
+// Does not authorize marketing, AI-generated calls, recording, or model training.
+const CONTACT_NOTICE_VERSION='niterun-services-request-contact-20261108-v1';
 const encoder=new TextEncoder();
 
 function response(body:Record<string,unknown>,status=200,origin?:string){
@@ -107,7 +110,10 @@ Deno.serve(async(req:Request)=>{
  const {error}=await client.from('nr_service_requests_v1').insert({
   full_name,email,phone,postal_code,service_key:service,city_key:city,timing_key:timing,
   details,source_utm:source,campaign_utm:campaign,landing_path,ip_hash,submission_hash,
-  contact_consent_at:now.toISOString(),stage:'new',provider_verified:false,verified_payment_cents:0
+  contact_consent_at:now.toISOString(),
+  contact_consent_notice_version:CONTACT_NOTICE_VERSION,
+  contact_consent_capture_method:'website_checkbox',
+  stage:'new',provider_verified:false,verified_payment_cents:0
  });
  if(error){
   if(error.code==='23505')
