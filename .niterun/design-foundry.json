@@ -1,0 +1,29 @@
+{
+  "$schema": "niterun.capability-contract.v1",
+  "id": "niterun.design-foundry.swarm",
+  "status": "staging-research-only",
+  "hosted_source": "chaybuilds/niterun-design-brain",
+  "repo_visibility": "private",
+  "deployment": "isolated VPS staging /srv/niterun/design-foundry-staging",
+  "website": "niterunservices.com",
+  "audience": "People requesting local services",
+  "primary_action": "Request an accurate service quote",
+  "design_rule": "Realistic service scope, real imagery and eligibility; inquiry is not a booking; no fabricated technician fleet, insurance or reviews.",
+  "tools": [
+    "UI UX Pro Max skill (owner Mac)",
+    "21st.dev licensed component discovery",
+    "Claude CLI (owner Mac)",
+    "NITERUN audit DAG"
+  ],
+  "input_contract": "JSON brief: site, customer, goal, brand, references[]",
+  "output_contract": "Run folder: result.json, events.jsonl, 8 role markdown artifacts",
+  "quality_gates": [
+    "real browser screenshots",
+    "mobile and keyboard",
+    "motion and reduced motion",
+    "verified CTA",
+    "component license",
+    "founder visual approval"
+  ],
+  "release_policy": "No automatic publish, no public model endpoint, no imaginary 72 agents."
+}
