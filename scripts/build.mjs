@@ -1,4 +1,5 @@
 import {mkdir,writeFile,rm,copyFile} from 'node:fs/promises';
+import {renderEditorialServiceStudy} from './21st-editorial-study.mjs';
 import {join,resolve,dirname} from 'node:path';
 
 const DIST=resolve('dist');
@@ -208,6 +209,7 @@ for(const service of SERVICES){
  }
 }
 await save('404.html',shell({title:'Page not found',desc:'Find a service or request an estimate with NiteRun Services.',route:'/404.html',depth:0,robots:'noindex,follow',content:'<section class="route-hero simple-hero"><div class="wrap route-hero-inner"><div class="route-copy"><div class="eyebrow">ERROR 404</div><h1>Wrong turn.<br><em>Right place.</em></h1><p>That address isn’t here. Choose a service or head back to the home page.</p><a class="btn btn-primary" href="./">Back to services →</a></div></div></section>'}));
+await save('studio/21st-services/index.html',renderEditorialServiceStudy(SERVICES));
 await save('robots.txt','User-agent: *\nAllow: /\nSitemap: '+HOST+'/sitemap.xml\n');
 const sitemapRoutes=['/','/services/','/about/','/privacy/',...SERVICES.map(s=>'/services/'+s.slug+'/')];
 await save('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+sitemapRoutes.map(route=>'  <url><loc>'+canonical(route)+'</loc></url>').join('\n')+'\n</urlset>\n');
