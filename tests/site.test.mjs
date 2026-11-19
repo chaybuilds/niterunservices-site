@@ -84,6 +84,7 @@ test('commercial pilot page describes unconfirmed availability and privacy match
  assert.match(commercial,/not a reservation/i);
  assert.match(privacy,/NITERUN.s server infrastructure/);
  assert.doesNotMatch(privacy,/hosted by Supabase/);
+ assert.match(privacy,/independent providers submit the free network interest form/);
  const partners=read('partners/index.html');
  assert.match(partners,/data-network-partner-form/);
  assert.match(partners,/https:\/\/niterun\.com\/api\/facilities-partner-interest/);
