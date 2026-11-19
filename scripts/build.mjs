@@ -3,7 +3,7 @@ import {join,resolve,dirname} from 'node:path';
 
 const DIST=resolve('dist');
 const HOST='https://chaybuilds.github.io/niterunservices-live-web';
-const API='https://succvbtctjkzsowotcsy.supabase.co/functions/v1/services-intake';
+const API='https://niterun.com/api/services-intake';
 const CITIES=[
  {slug:'wilmington',name:'Wilmington',region:'Coastal NC',hint:'Homes, condos, rentals and local properties'},
  {slug:'raleigh',name:'Raleigh',region:'Triangle NC',hint:'Busy households, properties and local vehicles'},

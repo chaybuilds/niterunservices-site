@@ -5,7 +5,7 @@ import {lookup,resolveCname} from 'node:dns/promises';
 const ORIGIN='https://niterunservices.com/';
 const WWW='https://www.niterunservices.com/';
 const DEFAULT='https://chaybuilds.github.io/niterunservices-site/';
-const API='https://succvbtctjkzsowotcsy.supabase.co/functions/v1/services-intake';
+const API='https://niterun.com/api/services-intake';
 const ips=new Set(['185.199.108.153','185.199.109.153','185.199.110.153','185.199.111.153']);
 
 async function fetchCheck(url,{timeoutMs=13500}={}){
