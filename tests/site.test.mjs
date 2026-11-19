@@ -10,8 +10,8 @@ const read=p=>readFileSync(join(BASE,p),'utf8');
 
 before(()=>execFileSync(process.execPath,['scripts/build.mjs'],{stdio:'pipe'}));
 
-test('21 original pages, 12 city/service routes and key static assets generate',()=>{
- const expected=['index.html','services/index.html','about/index.html','privacy/index.html',
+test('22 published pages, 12 city/service routes and key static assets generate',()=>{
+ const expected=['index.html','services/index.html','commercial/index.html','about/index.html','privacy/index.html',
   ...services.map(s=>'services/'+s+'/index.html'),
   ...services.flatMap(s=>cities.map(c=>s+'/'+c+'/index.html')),
   '404.html','robots.txt','sitemap.xml','assets/site.css','assets/site.js','assets/favicon.svg'];
@@ -19,7 +19,7 @@ test('21 original pages, 12 city/service routes and key static assets generate',
  assert.equal(services.length*cities.length,12);
 });
 test('every internal link in all generated pages resolves to a file within the site',()=>{
- const pages=['index.html','services/index.html','about/index.html','privacy/index.html',
+ const pages=['index.html','services/index.html','commercial/index.html','about/index.html','privacy/index.html',
   ...services.map(s=>'services/'+s+'/index.html'),
   ...services.flatMap(s=>cities.map(c=>s+'/'+c+'/index.html'))];
  let inspected=0;
@@ -62,7 +62,7 @@ test('city request pages remain noindex pending actual provider and GBP eligibil
  }
 });
 test('every request form has explicit consent, protected inquiry language, honeypot and privacy',()=>{
- const pages=['index.html',...services.map(s=>'services/'+s+'/index.html'),
+ const pages=['index.html','commercial/index.html',...services.map(s=>'services/'+s+'/index.html'),
   ...services.flatMap(s=>cities.map(c=>s+'/'+c+'/index.html'))];
  for(const p of pages){
   const doc=read(p);
@@ -72,6 +72,18 @@ test('every request form has explicit consent, protected inquiry language, honey
   assert.match(doc,/not<\/strong> a confirmed booking/,'Misleading booking state '+p);
   assert.match(doc,/services-intake/,'Missing public intake endpoint '+p);
  }
+});
+test('commercial pilot page describes unconfirmed availability and privacy matches VPS storage',()=>{
+ const commercial=read('commercial/index.html');
+ const privacy=read('privacy/index.html');
+ assert.match(commercial,/NITE FACILITIES/);
+ assert.match(commercial,/meta name="robots" content="noindex,follow"/);
+ assert.match(commercial,/<option value="cleaning" selected/);
+ assert.match(commercial,/<option value="wilmington" selected/);
+ assert.match(commercial,/data-endpoint="https:\/\/niterun\.com\/api\/services-intake"/);
+ assert.match(commercial,/not a reservation/i);
+ assert.match(privacy,/NITERUN.s server infrastructure/);
+ assert.doesNotMatch(privacy,/hosted by Supabase/);
 });
 test('static files avoid trackers, payment processors, hardcoded keys and fake testimonials',()=>{
  const html=read('index.html'),js=read('assets/site.js');

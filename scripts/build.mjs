@@ -2,7 +2,7 @@ import {mkdir,writeFile,rm,copyFile} from 'node:fs/promises';
 import {join,resolve,dirname} from 'node:path';
 
 const DIST=resolve('dist');
-const HOST='https://chaybuilds.github.io/niterunservices-live-web';
+const HOST='https://niterunservices.com';
 const API='https://niterun.com/api/services-intake';
 const CITIES=[
  {slug:'wilmington',name:'Wilmington',region:'Coastal NC',hint:'Homes, condos, rentals and local properties'},
@@ -59,7 +59,7 @@ function requestForm(depth,selectedService='',selectedCity=''){
  </form>`;
 }
 function mainNav(depth){
- const links=[['Services','services/'],['Locations','#locations'],['How it works','#how'],['About','about/']];
+ const links=[['Services','services/'],['Commercial','commercial/'],['Locations','#locations'],['How it works','#how'],['About','about/']];
  const linkHtml=links.map(([text,route])=>'<a href="'+(route.startsWith('#')?href(depth,'')+route:href(depth,route))+'">'+text+'</a>').join('');
  return `<header class="header"><div class="header-inner wrap">
  <a class="wordmark" href="${href(depth)}" aria-label="NiteRun Services — homepage"><span class="mark"><span>N</span></span><span class="brand-stack"><strong>NITERUN</strong><small>SERVICES</small></span></a>
@@ -175,15 +175,35 @@ function serviceIndex(){
  <section class="section section-services"><div class="wrap"><div class="service-grid">${SERVICES.map(s=>serviceCard(s,1)).join('')}</div></div></section>`;
 }
 const aboutBody=`<section class="route-hero"><div class="wrap route-hero-inner"><div class="route-copy"><span class="eyebrow"><span class="eyebrow-rule"></span> ABOUT THE PLATFORM</span><h1>Built to make<br><em>requests simpler.</em></h1><p>NiteRun Services brings multiple service divisions under one brand and one intake process, operated by NITE Run Delivery LLC. We're building the operational network step by step, with verified fulfillment ahead of empty promises.</p><a href="../#request" class="btn btn-primary">Request availability ${icon('arrow',19)}</a></div><div class="route-art">${icon('shield',118)}<span>Clarity before booking</span></div></div></section><section class="section"><div class="wrap rich-text"><h2>One operating system, not four disconnected websites.</h2><p>NiteClean, NiteDetail, NiteWash and NiteHolidays are service divisions of NiteRun Services—not separate legal subsidiaries by default. Customers can request estimates through one website and our team can review each inquiry by service and city.</p><h2>Independent fulfillment, transparent next steps.</h2><p>When projects can be fulfilled, independent service professionals may do the work. We will verify availability and discuss qualifications, pricing, scope and scheduling before a service is confirmed. Neither an inquiry nor a page for a city means providers are already available there.</p><h2>Interested in collaborating?</h2><p>If you are an independent provider or property operator, contact <a href="mailto:chayson@niterun.com?subject=NiteRun%20Services%20partnership">chayson@niterun.com</a> with your service area and capabilities. No work or earnings are guaranteed.</p></div></section>`;
-const privacyBody=`<section class="route-hero simple-hero"><div class="wrap route-hero-inner"><div class="route-copy"><span class="eyebrow"><span class="eyebrow-rule"></span> YOUR INFORMATION</span><h1>Privacy,<br><em>without guesswork.</em></h1><p>What we collect when you ask for help and how to reach us about your information.</p></div></div></section><section class="section"><div class="wrap rich-text"><p><strong>Effective date:</strong> November 8, 2026.</p>
+const privacyBody=`<section class="route-hero simple-hero"><div class="wrap route-hero-inner"><div class="route-copy"><span class="eyebrow"><span class="eyebrow-rule"></span> YOUR INFORMATION</span><h1>Privacy,<br><em>without guesswork.</em></h1><p>What we collect when you ask for help and how to reach us about your information.</p></div></div></section><section class="section"><div class="wrap rich-text"><p><strong>Effective date:</strong> November 19, 2026.</p>
  <h2>Who operates this site?</h2><p>NiteRun Services is a service platform operated by NITE Run Delivery LLC. Contact: <a href="mailto:chayson@niterun.com">chayson@niterun.com</a>.</p>
- <h2>What information do we collect?</h2><p>When you submit an inquiry, we ask for your name, email, selected service and city, timing, project description, and your consent to contact you. You may optionally provide a phone number and ZIP code. We may retain basic source-attribution data and pseudonymous daily anti-abuse hashes with the request record while it is needed for operational and legal purposes. Please avoid sending payment cards, government IDs, passwords or medical information through the request form.</p>
+ <h2>What information do we collect?</h2><p>When you submit an inquiry, we ask for your name, email, selected service and city, timing, project description, and your consent to contact you. You may optionally provide a phone number and ZIP code. We may record basic source-attribution data with your request. A separate short-lived, pseudonymous abuse-prevention record helps rate-limit submissions. Please avoid sending payment cards, government IDs, passwords or medical information through the request form.</p>
  <h2>How is it used?</h2><p>To review your request, assess availability, ask clarifying questions, coordinate possible service professionals and respond about the proposed work. Form submission does not enroll you in marketing or authorize recurring SMS messages.</p>
- <h2>Storage and service partners</h2><p>Requests are held in an access-restricted database hosted by Supabase. We may share only the necessary project details with prospective independent fulfillment providers when needed to assess your request. We do not sell contact lists. We use service providers to operate and secure the website.</p>
+ <h2>Storage and service partners</h2><p>New inquiries are held in an access-restricted database on NITERUN's server infrastructure. We may share only the necessary project details with prospective independent fulfillment providers when needed to assess your request. We do not sell contact lists. We use service providers to operate and secure the website.</p>
  <h2>Retention and choices</h2><p>We retain information for as long as reasonably needed to evaluate and manage requests, handle disputes, comply with law and prevent abuse. To request access, correction or deletion when applicable, email <a href="mailto:chayson@niterun.com?subject=NiteRun%20Services%20privacy%20request">chayson@niterun.com</a>. Certain records may need to be kept to meet legal obligations.</p>
  <h2>Tracking</h2><p>We may record non-sensitive campaign parameters you arrive with for basic acquisition measurement. The site does not require an advertising tracker or account to submit a request.</p>
  <h2>Changes</h2><p>We may update this notice as services evolve. Material changes will be reflected in the date above.</p></div></section>`;
 
+const commercialBody=`
+ <section class='route-hero'><div class='wrap route-hero-inner'><div class='route-copy'>
+  <span class='eyebrow'><span class='eyebrow-rule'></span> NITE FACILITIES / WILMINGTON PILOT</span>
+  <h1>Commercial spaces.<br><em>One coordinated next step.</em></h1>
+  <p>For property managers, general contractors, building owners and operators who need cleaning estimates. Share your scope. We review provider suitability, licensing where applicable, insurance, written pricing and availability before any service is confirmed.</p>
+  <a href='#request' class='btn btn-primary'>Request a commercial estimate ${icon('arrow',19)}</a>
+ </div><div class='route-art route-art-cleaning'>${icon('clean',112)}<span>Facilities inquiries</span></div></div></section>
+ <section class='section section-services'><div class='wrap'><div class='section-heading'><div><span class='eyebrow eyebrow-dark'><span class='eyebrow-rule'></span> COMMERCIAL SERVICE REQUESTS</span><h2>Clear scope.<br><i>No empty promises.</i></h2></div><p>These are requests we can assess, not advertised guaranteed services. A qualified provider and accepted quote are required before scheduling.</p></div><div class='steps'>
+ <div><span class='step-num'>01</span><h3>Property turnover</h3><p>Vacant apartments, move-outs, move-ins and unit resets with target handover dates.</p></div>
+ <div><span class='step-num'>02</span><h3>Post-construction final clean</h3><p>Builder handovers and renovation cleans, with appropriate site and safety requirements.</p></div>
+ <div><span class='step-num'>03</span><h3>Recurring commercial cleaning</h3><p>Office and shared-area cleaning with verified crews and an agreed visit schedule.</p></div>
+ <div><span class='step-num'>04</span><h3>Specialty cleaning inquiries</h3><p>Floor care and unusual requests reviewed individually; some work may be outside available scope.</p></div>
+ </div></div></section>
+ <section class='section section-how'><div class='wrap'><div class='section-heading'><div><span class='eyebrow eyebrow-dark'><span class='eyebrow-rule'></span> HOW THIS WORKS</span><h2>Request. Verify.<br><i>Then confirm.</i></h2></div><p>No credit card or account is required to request an estimate.</p></div>
+ <div class='steps'><div><span class='step-num'>01</span><h3>Share the scope</h3><p>Provide property type, size, access, timing and special requirements.</p></div><div><span class='step-num'>02</span><h3>Review qualifications</h3><p>We assess whether a suitable insured provider is available for the work.</p></div><div><span class='step-num'>03</span><h3>Approve terms</h3><p>Any actual proposal requires a written quote and customer agreement.</p></div><div><span class='step-num'>04</span><h3>Verify work</h3><p>Only accepted jobs are scheduled and completion is documented.</p></div></div></div></section>
+ <section class='section section-request' id='request'><div class='wrap request-layout'>
+ <div class='request-intro'><span class='eyebrow'><span class='eyebrow-rule'></span> WILMINGTON, NORTH CAROLINA</span><h2>What does your<br><em>property need?</em></h2><p>Describe the type of commercial property, approximate square footage, target date, access details and desired outcome. This is an inquiry, not a reservation. Only a written quote and accepted terms can confirm a job.</p>
+ <p class='request-contact'>Independent cleaners seeking possible supplier partnerships can email <a href='mailto:chayson@niterun.com?subject=NITE%20FACILITIES%20provider%20interest'>NITE FACILITIES</a> with service areas, qualifications, insurance and available work categories. Joining does not guarantee assignments.</p></div>
+ <div class='request-panel'>${requestForm(1,'cleaning','wilmington')}</div></div></section>
+`;
 async function save(path,contents){
  const target=join(DIST,path);
  await mkdir(dirname(target),{recursive:true});
@@ -194,6 +214,7 @@ await mkdir(DIST,{recursive:true});
 // The GitHub Pages Actions custom domain is configured via repository Settings, not a CNAME artifact.
 await save('index.html',shell({title:'Home, vehicle and seasonal services — one simple request',desc:'One place to request cleaning, detailing, exterior washing and holiday service estimates in North Carolina. Review availability before booking.',route:'/',depth:0,content:homeBody,bodyClass:'home'}));
 await save('services/index.html',shell({title:'Explore our services',desc:'Explore NiteClean, NiteDetail, NiteWash and NiteHolidays. Request clear scope and local availability before scheduling.',route:'/services/',depth:1,content:serviceIndex()}));
+await save('commercial/index.html',shell({title:'NITE FACILITIES — Commercial cleaning inquiries in Wilmington, NC',desc:'Request commercial property turnover, post-construction final cleaning and recurring facility cleaning estimates in Wilmington. All availability requires verification.',route:'/commercial/',depth:1,robots:'noindex,follow',content:commercialBody}));
 await save('about/index.html',shell({title:'About NiteRun Services',desc:'Learn how NiteRun Services coordinates independent home, auto and seasonal service requests with transparent booking steps.',route:'/about/',depth:1,content:aboutBody}));
 await save('privacy/index.html',shell({title:'Privacy policy',desc:'Learn how NiteRun Services handles service request information, privacy choices and contact preferences.',route:'/privacy/',depth:1,content:privacyBody}));
 for(const service of SERVICES){
@@ -215,4 +236,4 @@ await mkdir(join(DIST,'assets'),{recursive:true});
 await copyFile(resolve('assets/site.css'),join(DIST,'assets','site.css'));
 await copyFile(resolve('assets/site.js'),join(DIST,'assets','site.js'));
 await copyFile(resolve('assets/favicon.svg'),join(DIST,'assets','favicon.svg'));
-console.log(JSON.stringify({status:'BUILT',pages:1+1+1+1+SERVICES.length*(1+CITIES.length)+1,totalRoutes:SERVICES.length*CITIES.length,generatedDirectory:DIST,quoteEndpoint:API}));
+console.log(JSON.stringify({status:'BUILT',pages:1+1+1+1+1+SERVICES.length*(1+CITIES.length)+1,totalRoutes:SERVICES.length*CITIES.length,generatedDirectory:DIST,quoteEndpoint:API}));
