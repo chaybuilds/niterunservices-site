@@ -111,6 +111,69 @@ async function submitRequest(form){
   button.innerHTML=original;
  }
 }
+async function submitProviderInterest(form){
+ const status=form.querySelector('.form-status');
+ const button=form.querySelector('button[type="submit"]');
+ if(form.dataset.pending==='true')return;
+ if(!form.checkValidity()){
+  form.reportValidity();
+  publishStatus(status,'error','Please complete the business details and confirm contact consent.');
+  return;
+ }
+ const fields=new FormData(form);
+ const body={
+  company:onlyText(fields.get('company'),140),
+  contact_name:onlyText(fields.get('contact_name'),100),
+  contact_email:onlyText(fields.get('contact_email'),180).toLowerCase(),
+  phone:onlyText(fields.get('phone'),40),
+  city:onlyText(fields.get('city'),100),
+  services:onlyText(fields.get('services'),250),
+  notes:onlyText(fields.get('notes'),500),
+  website:onlyText(fields.get('website'),150),
+  consent:fields.get('consent')==='on'
+ };
+ if(!body.company||!body.contact_name||!body.consent||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.contact_email)||
+    !VALID_CITIES.has(body.city)||!VALID_SERVICES.has(body.services)){
+  publishStatus(status,'error','Check your contact details, market, service and consent.');
+  return;
+ }
+ const original=button.innerHTML;
+ form.dataset.pending='true';
+ button.disabled=true;
+ button.textContent='Sending your interest…';
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(),API_TIMEOUT_MS);
+ try{
+  const response=await fetch(form.dataset.endpoint,{
+   method:'POST',mode:'cors',credentials:'omit',signal:controller.signal,
+   headers:{'Content-Type':'application/json','Accept':'application/json'},
+   body:JSON.stringify(body)
+  });
+  if(response.status===429){
+   publishStatus(status,'error','Too many requests. Please try again later.');
+   return;
+  }
+  if(!response.ok)throw Error('Failed to verify receipt');
+  const result=await response.json();
+  if(result?.accepted===true&&result?.provider_status==='interest_received'){
+   publishStatus(status,'success','Your provider interest was received for review. You are not yet approved or assigned any work. We will only contact you about this request.');
+   form.reset();
+  }else throw Error('Unverified server response');
+ }catch{
+  publishStatus(status,'error','We could not verify your submission. Please try again later.');
+ }finally{
+  clearTimeout(timer);
+  button.disabled=false;
+  button.innerHTML=original;
+  form.dataset.pending='false';
+ }
+}
+document.querySelectorAll('form[data-network-partner-form]').forEach(form=>{
+ form.addEventListener('submit',event=>{
+  event.preventDefault();void submitProviderInterest(form);
+ });
+});
 document.querySelectorAll('form[data-intake-form]').forEach(form=>{
  const segments=window.location.pathname.split('/').filter(Boolean);
  form.dataset.locationForm=segments.length>=2&&VALID_SERVICES.has(segments[segments.length-2])&&VALID_CITIES.has(segments[segments.length-1])?'true':'false';

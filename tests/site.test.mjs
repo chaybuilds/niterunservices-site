@@ -10,8 +10,8 @@ const read=p=>readFileSync(join(BASE,p),'utf8');
 
 before(()=>execFileSync(process.execPath,['scripts/build.mjs'],{stdio:'pipe'}));
 
-test('22 published pages, 12 city/service routes and key static assets generate',()=>{
- const expected=['index.html','services/index.html','commercial/index.html','about/index.html','privacy/index.html',
+test('23 published pages, 12 city/service routes and key static assets generate',()=>{
+ const expected=['index.html','services/index.html','commercial/index.html','partners/index.html','about/index.html','privacy/index.html',
   ...services.map(s=>'services/'+s+'/index.html'),
   ...services.flatMap(s=>cities.map(c=>s+'/'+c+'/index.html')),
   '404.html','robots.txt','sitemap.xml','assets/site.css','assets/site.js','assets/favicon.svg'];
@@ -19,7 +19,7 @@ test('22 published pages, 12 city/service routes and key static assets generate'
  assert.equal(services.length*cities.length,12);
 });
 test('every internal link in all generated pages resolves to a file within the site',()=>{
- const pages=['index.html','services/index.html','commercial/index.html','about/index.html','privacy/index.html',
+ const pages=['index.html','services/index.html','commercial/index.html','partners/index.html','about/index.html','privacy/index.html',
   ...services.map(s=>'services/'+s+'/index.html'),
   ...services.flatMap(s=>cities.map(c=>s+'/'+c+'/index.html'))];
  let inspected=0;
@@ -84,6 +84,12 @@ test('commercial pilot page describes unconfirmed availability and privacy match
  assert.match(commercial,/not a reservation/i);
  assert.match(privacy,/NITERUN.s server infrastructure/);
  assert.doesNotMatch(privacy,/hosted by Supabase/);
+ const partners=read('partners/index.html');
+ assert.match(partners,/data-network-partner-form/);
+ assert.match(partners,/https:\/\/niterun\.com\/api\/facilities-partner-interest/);
+ assert.match(partners,/name='consent' required/);
+ assert.match(partners,/No upfront platform fees/i);
+ assert.match(commercial,/provider.*bill|provider.*invoice/i);
 });
 test('static files avoid trackers, payment processors, hardcoded keys and fake testimonials',()=>{
  const html=read('index.html'),js=read('assets/site.js');
